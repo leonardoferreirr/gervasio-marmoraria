@@ -68,9 +68,7 @@ a{color:inherit;text-decoration:none}
 .it{font-style:italic}
 .lead{font-size:clamp(1.05rem,.5vw + .94rem,1.22rem);color:var(--tinta-2);line-height:1.62;max-width:56ch}
 .pequeno{font-size:.86rem;color:var(--tinta-3);line-height:1.6}
-.rotulo{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bordo);
-  display:flex;align-items:center;gap:.6rem}
-.rotulo::before{content:'';width:26px;height:1px;background:var(--bordo);flex:none;opacity:.5}
+
 
 /* ---------- botões ---------- */
 .btn{
@@ -93,19 +91,26 @@ a{color:inherit;text-decoration:none}
 /* ---------- nav ---------- */
 .nav{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s var(--ease),box-shadow .35s var(--ease),backdrop-filter .35s}
 .nav__in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:76px}
-.nav__marca{display:flex;align-items:center;gap:.7rem;color:var(--bordo);
-  padding-block:.55rem;min-height:44px}   /* a marca também é um link: precisa de área de toque */
+/* o hero é escuro, então a marca nasce branca e vira bordô quando a barra
+   ganha fundo claro na rolagem */
+.nav__marca{display:flex;align-items:center;gap:.7rem;color:#f4f1eb;
+  padding-block:.55rem;min-height:44px;transition:color .35s var(--ease)}
+.nav[data-fixa] .nav__marca{color:var(--bordo)}
 .nav__marca .los{width:26px;height:26px;flex:none}
 .nav__marca .wm{width:clamp(112px,13vw,148px)}
 .nav__links{display:flex;gap:2rem;list-style:none;font-size:.9rem}
-.nav__links a{color:var(--tinta-2);position:relative;padding-block:.3rem;transition:color .3s var(--ease)}
+.nav__links a{color:rgba(244,241,235,.86);position:relative;padding-block:.3rem;transition:color .3s var(--ease)}
+.nav[data-fixa] .nav__links a{color:var(--tinta-2)}
 .nav__links a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--bordo);
   transition:right .35s var(--ease)}
 .nav__links a:hover{color:var(--bordo)}
 .nav__links a:hover::after{right:0}
 .nav[data-fixa]{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--linha)}
 .nav__burger{display:none;width:44px;height:44px;padding:11px 6px;margin-right:-6px;background:none;border:0;cursor:pointer;position:relative}
-.nav__burger span{position:absolute;left:6px;width:32px;height:1.7px;background:var(--tinta);transition:.34s var(--ease)}
+.nav__burger span{position:absolute;left:6px;width:32px;height:1.7px;background:#f4f1eb;transition:.34s var(--ease)}
+.nav[data-fixa] .nav__burger span{background:var(--tinta)}
+.nav[data-claro] .nav__burger span{background:var(--tinta)}
+.nav[data-claro] .nav__marca{color:var(--bordo)}
 .nav__burger span:nth-child(1){top:13px}
 .nav__burger span:nth-child(2){top:21.5px}
 .nav__burger span:nth-child(3){top:30px}
@@ -121,24 +126,31 @@ a{color:inherit;text-decoration:none}
 .gaveta .btn{font-family:var(--sans);font-size:.95rem;margin-top:1.6rem;justify-self:start}
 body.travado{overflow:hidden}
 
-/* ---------- hero ---------- */
-.hero{padding-block:clamp(8rem,15vh,10.5rem) clamp(3rem,6vw,5rem);position:relative;overflow:hidden}
-.hero__grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
-  gap:clamp(2.5rem,5vw,4.5rem);align-items:center}
+/* ---------- hero: a pedra viva mora aqui ---------- */
+.hero{position:relative;overflow:hidden;background:var(--verde);isolation:isolate;
+  min-height:100svh;display:grid;align-items:center;
+  padding-block:clamp(7rem,13vh,9rem) clamp(3rem,6vw,4.5rem)}
+.hero__tela{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero__tela--luz{z-index:2}
+/* ordem: pedra, véu, luz, conteúdo. O véu acima dos pulsos apagaria a luz. */
+.hero__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(2,16,12,.95) 0%,rgba(2,16,12,.88) 26%,rgba(2,16,12,.6) 48%,rgba(2,16,12,.4) 100%),
+    linear-gradient(rgba(2,16,12,.55),rgba(2,16,12,.34) 40%,rgba(2,16,12,.6))}
+.hero__grid{position:relative;z-index:3;display:grid;
+  grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);
+  gap:clamp(2rem,4vw,3.4rem);align-items:center}
+.hero .h1{font-size:clamp(2.4rem,5.2vw,4.3rem)}
+.hero .h1{color:#f7f5f0}
+.hero .lead{color:rgba(238,244,236,.84)}
+.hero .bordo{color:#e8c98d}
 .hero__t{margin-block:1.5rem 1.6rem}
 /* três colunas de largura igual: em flex com min-width o "RT" caía sozinho
    para a segunda linha e desequilibrava o bloco */
 .hero__marca{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem 1.6rem;
-  margin-top:2.8rem;padding-top:1.8rem;border-top:1px solid var(--linha)}
-.hero__marca b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:400;color:var(--bordo);line-height:1.1}
-.hero__marca span{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--tinta-3)}
-.hero__foto{position:relative}
-.hero__foto img{width:100%;border-radius:2px;background:var(--papel-3)}
-.hero__foto::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(28,26,25,.08);pointer-events:none}
-.hero__selo{position:absolute;left:0;bottom:0;background:var(--papel);padding:.85rem 1.15rem .8rem;
-  max-width:min(21rem,86%);border-top:2px solid var(--bordo)}
-.hero__selo b{display:block;font-size:.82rem;font-weight:600;letter-spacing:.03em;margin-bottom:.1rem}
-.hero__selo span{font-size:.78rem;color:var(--tinta-3);line-height:1.45;display:block}
+  margin-top:2.6rem;padding-top:1.7rem;border-top:1px solid rgba(242,239,233,.22)}
+.hero__marca b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#e8c98d;line-height:1.1}
+.hero__marca span{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:rgba(238,244,236,.62)}
 
 /* ---------- faixa de materiais ---------- */
 .fita{border-block:1px solid var(--linha);padding-block:1.05rem;overflow:hidden;
@@ -158,27 +170,6 @@ body.travado{overflow:hidden}
 .corpo p + p{margin-top:1.1rem}
 .corpo{color:var(--tinta-2)}
 
-/* ---------- pedra viva (canvas) ---------- */
-.pedra{position:relative;min-height:min(94vh,780px);display:grid;align-items:center;
-  background:var(--verde);overflow:hidden;isolation:isolate}
-/* ordem: pedra, véu, luz, texto. O véu precisa ficar ENTRE a pedra e os
-   pulsos, senão ele escurece justamente a luz que deveria brilhar. */
-.pedra__tela{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-.pedra__tela--luz{z-index:2}
-/* dois véus somados: um escurece a coluna do texto, o outro rebaixa a
-   pedra inteira. Sem eles o branco do título disputa com os veios claros. */
-.pedra__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    linear-gradient(90deg,rgba(2,16,12,.86) 0%,rgba(2,16,12,.62) 34%,rgba(2,16,12,.1) 62%,transparent 80%),
-    linear-gradient(rgba(2,16,12,.34),rgba(2,16,12,.18) 42%,rgba(2,16,12,.44))}
-.pedra__in{position:relative;z-index:4;padding-block:clamp(4.5rem,10vw,7rem);color:#f2efe9}
-.pedra__in .rotulo{color:#9fd8bb}
-.pedra__in .rotulo::before{background:#9fd8bb}
-.pedra .h2{color:#f7f5f0;margin-block:1.4rem 1.5rem;max-width:18ch}
-.pedra p{color:rgba(238,244,236,.82);max-width:46ch}
-.pedra__nota{margin-top:2.6rem;padding-top:1.5rem;border-top:1px solid rgba(242,239,233,.18);
-  font-size:.84rem;color:rgba(238,244,236,.6);max-width:40ch}
-
 /* ---------- categorias ---------- */
 .cat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,2.6rem)}
 .cat__c{display:grid;gap:1.4rem;align-content:start}
@@ -190,23 +181,52 @@ body.travado{overflow:hidden}
 .cat__lista li::before{content:'';width:6px;height:6px;margin-top:.62rem;flex:none;background:var(--bordo);
   transform:rotate(45deg)}
 
-/* ---------- peças ----------
-   3 colunas × 2 linhas com as 6 peças: em 4 colunas, a peça alta ocupava
-   duas linhas e sobrava um buraco no canto direito da segunda. */
-.pecas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.8rem,1.6vw,1.3rem)}
-.peca{position:relative;overflow:hidden;background:var(--papel-3);border-radius:2px}
-.peca img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4;transition:transform 1.4s var(--ease)}
-.peca:hover img{transform:scale(1.04)}
-.peca__leg{position:absolute;left:0;right:0;bottom:0;padding:2.4rem .9rem .8rem;color:#fff;font-size:.82rem;
-  background:linear-gradient(transparent,rgba(12,10,9,.74))}
 
-/* ---------- aplicações ---------- */
-.apl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.8rem,1.6vw,1.3rem)}
-.apl figure{position:relative;overflow:hidden;background:var(--papel-3);border-radius:2px}
-.apl img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3;transition:transform 1.4s var(--ease)}
-.apl figure:hover img{transform:scale(1.04)}
-.apl figcaption{position:absolute;left:0;right:0;bottom:0;padding:2.2rem .9rem .75rem;color:#fff;font-size:.84rem;
-  background:linear-gradient(transparent,rgba(12,10,9,.7))}
+/* ---------- colunas de foto do hero ----------
+   Duas colunas correndo em sentidos opostos no desktop; no celular vira
+   uma faixa horizontal, que é o único jeito de caber sem espremer. */
+.hero__gal{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,1.1vw,.9rem);
+  height:clamp(380px,62vh,620px);overflow:hidden;
+  -webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
+.hero__col{display:grid;gap:clamp(.6rem,1.1vw,.9rem);align-content:start;
+  animation:sobe 46s linear infinite;will-change:transform}
+.hero__col--desce{animation-name:desce;animation-duration:54s;margin-top:-9%}
+.hero__col > picture{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:2px;
+  box-shadow:0 10px 30px rgba(0,0,0,.32)}
+.hero__col img{display:block;width:100%;height:100%;object-fit:cover}
+@keyframes sobe{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes desce{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+.hero__gal:hover .hero__col{animation-play-state:paused}
+
+/* ---------- carrossel de trabalhos ---------- */
+.car{position:relative}
+.car__pista{display:flex;gap:clamp(.7rem,1.4vw,1.1rem);overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;padding-bottom:.4rem;
+  scrollbar-width:none;-ms-overflow-style:none}
+.car__pista::-webkit-scrollbar{display:none}
+.card{position:relative;flex:0 0 clamp(230px,26vw,320px);scroll-snap-align:start;
+  border-radius:3px;overflow:hidden;background:#0e0d0b;isolation:isolate;aspect-ratio:27/40;display:block}
+.card img{width:100%;height:100%;object-fit:cover;opacity:.94;transition:transform 1.2s var(--ease),opacity .5s}
+.card:hover img{transform:scale(1.05);opacity:1}
+/* o degradê e o texto ficam embaixo: em cima disputavam com o assunto da foto */
+.card__v{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,rgba(10,9,8,.93) 0%,rgba(10,9,8,.62) 26%,rgba(10,9,8,.06) 56%,transparent 74%)}
+.card__c{position:absolute;left:0;right:0;bottom:0;padding:clamp(1rem,1.8vw,1.5rem)}
+.card__n{font-family:var(--serif);color:#fff;font-size:clamp(1.2rem,1.6vw,1.45rem);line-height:1.1}
+.card__d{color:rgba(255,255,255,.8);font-size:.87rem;line-height:1.5;margin-top:.35rem}
+.car__nav{position:absolute;top:calc(50% - 22px);width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(255,255,255,.94);color:var(--tinta);display:grid;place-items:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.18);transition:background .3s var(--ease),opacity .3s}
+.car__nav:hover{background:#fff}
+.car__nav svg{width:17px;height:17px}
+/* a seta fica montada na borda do card, metade para fora */
+.car__nav--ant{left:-22px}
+.car__nav--prox{right:-22px}
+.car__nav[disabled]{opacity:.32;cursor:default}
+
+/* ---------- CTA de fim de seção ---------- */
+.cta-centro{display:flex;justify-content:center;margin-top:clamp(2.4rem,4vw,3.4rem)}
 
 /* ---------- números / diferenciais ---------- */
 .dif{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1.6rem,3vw,2.6rem)}
@@ -278,15 +298,26 @@ body.travado{overflow:hidden}
 @media (max-width:1000px){
   .nav__links{display:none}
   .nav__burger{display:block}
-  .hero__grid{grid-template-columns:1fr;gap:2.6rem}
-  .hero__foto{max-width:520px;width:100%}
+  .hero{min-height:auto}
+  .hero__grid{grid-template-columns:1fr;gap:2.4rem}
+  /* no celular as colunas viram uma faixa horizontal */
+  .hero__gal{grid-template-columns:1fr;height:auto;gap:.6rem;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .hero__col{grid-auto-flow:column;grid-auto-columns:clamp(150px,42vw,210px);
+    animation-name:corre;animation-duration:44s}
+  /* o deslocamento vertical serve às colunas do desktop; aqui ele empilhava
+     a segunda faixa por cima da primeira e só uma aparecia */
+  .hero__col--desce{animation-name:corre-volta;animation-duration:52s;margin-top:0}
+  @keyframes corre{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes corre-volta{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+  .car__nav{display:none}
+  .car__pista{padding-inline:0}
   .duo,.contato__grid{grid-template-columns:1fr;gap:2.2rem}
   .cat{grid-template-columns:1fr;gap:2.6rem}
   .dif{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .pecas{grid-template-columns:repeat(2,minmax(0,1fr))}
   
   
-  .apl{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rodape__top{grid-template-columns:1fr 1fr}
   .rodape__marca{grid-column:1/-1}
 }
@@ -298,7 +329,6 @@ body.travado{overflow:hidden}
 }
 @media (max-width:620px){
   .dif{grid-template-columns:1fr}
-  .apl{grid-template-columns:1fr 1fr}
   .pedra{min-height:auto}
   /* em 390px as três colunas espremiam "de raio a partir de Nova Lima" em
      três linhas. Aqui viram três linhas de verdade, valor e rótulo lado a lado. */
