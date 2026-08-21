@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Abrindo o WhatsApp · Gervásio Mármores e Granitos</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:'Instrument Serif';src:url('assets/fonts/instrument-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-latin.woff2') format('woff2');font-weight:300 700;font-display:swap}
+*{margin:0;box-sizing:border-box}
+body{font-family:'Archivo',system-ui,sans-serif;background:#fff;color:#1c1a19;min-height:100svh;
+  display:grid;place-items:center;text-align:center;padding:2rem}
+.caixa{max-width:36ch}
+.los{width:44px;height:44px;margin:0 auto 1.5rem;color:#671f21}
+h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.8rem;line-height:1.15;margin-bottom:.7rem}
+.it{font-style:italic;color:#671f21}
+p{color:#55504b;font-size:.98rem;line-height:1.62}
+.giro{width:32px;height:32px;margin:1.8rem auto 0;border:2px solid rgba(103,31,33,.2);
+  border-top-color:#671f21;border-radius:50%;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+.manual{margin-top:1.5rem;display:none}
+.manual a{display:inline-block;border:1px solid rgba(28,26,25,.22);border-radius:100px;
+  padding:.8rem 1.5rem;font-size:.9rem;color:#1c1a19;text-decoration:none;min-height:48px;
+  display:inline-flex;align-items:center}
+.manual a:hover{border-color:#671f21;color:#671f21}
+@media (prefers-reduced-motion:reduce){.giro{animation:none}}
+</style>
+</head>
+<body>
+<div class="caixa">
+  <svg class="los" viewBox="0 0 100 100" fill="none" stroke="currentColor" aria-hidden="true"><path d="M50 3 96 50 50 97 4 50Z" stroke-width="3"/><path d="M50 13 86 50 50 87 14 50Z" stroke-width="1.5" opacity=".55"/><path d="M50 21 56.5 27.5 50 34 43.5 27.5Z" fill="currentColor" stroke="none"/><path d="M50 66 56.5 72.5 50 79 43.5 72.5Z" fill="currentColor" stroke="none"/></svg>
+  <h1>Abrindo o seu <span class="it">WhatsApp</span></h1>
+  <p id="msg">Um instante, estamos levando você para a conversa com a Gervásio.</p>
+  <div class="giro" id="giro"></div>
+  <div class="manual" id="manual"><a id="ir" href="#">Abrir a conversa</a></div>
+</div>
+<script>
+(function(){
+  function q(k){ return new URLSearchParams(location.search).get(k) || ''; }
+  var n = q('n'), t = q('t') || '';
+  var valido = n && /^[0-9]{10,15}$/.test(n);
+  var alvo = valido ? ('https://wa.me/' + n + (t ? ('?text=' + encodeURIComponent(t)) : '')) : '';
+
+  // evento de conversão: funciona quando houver GTM ou pixel, inofensivo sem
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'whatsapp_click', destino: 'Gervasio Marmores e Granitos' });
+
+  var manual = document.getElementById('manual'), ir = document.getElementById('ir'),
+      giro = document.getElementById('giro'), msg = document.getElementById('msg');
+  if (valido) {
+    ir.href = alvo;
+    setTimeout(function(){ location.href = alvo; }, 1500);
+    setTimeout(function(){ giro.style.display='none'; manual.style.display='block'; }, 3000);
+  } else {
+    giro.style.display='none';
+    msg.innerHTML = 'Não conseguimos montar o link. Fale com a Gervásio pelo telefone ' +
+      '<a href="tel:+553135418936" style="color:#671f21">(31) 3541-8936</a> ou pelo Instagram ' +
+      '<a href="https://www.instagram.com/marmorariagervasio_/" target="_blank" rel="noopener" style="color:#671f21">@marmorariagervasio_</a>.';
+    manual.style.display='block';
+    ir.textContent = 'Voltar ao site'; ir.href = 'index.html';
+  }
+})();
+</script>
+</body>
+</html>
