@@ -87,6 +87,9 @@ a{color:inherit;text-decoration:none}
 .btn--claro{background:transparent;color:#f2efe9;border-color:rgba(242,239,233,.42)}
 .btn--claro:hover{background:rgba(242,239,233,.1);border-color:rgba(242,239,233,.7)}
 .acoes{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.2rem}
+/* CTA que fecha um bloco de texto: cola no parágrafo em vez de flutuar
+   no fim da seção, e é o que tira a altura sobrando */
+.acoes--fim{margin-top:1.9rem}
 
 /* ---------- nav ---------- */
 .nav{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s var(--ease),box-shadow .35s var(--ease),backdrop-filter .35s}
@@ -152,6 +155,19 @@ body.travado{overflow:hidden}
 .hero__marca b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#e8c98d;line-height:1.1}
 .hero__marca span{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:rgba(238,244,236,.62)}
 
+/* ---------- foto lateral (seção "A pedra é definitiva") ----------
+   O grid estica a coluna: a foto passa a ter exatamente a altura do bloco
+   de texto, do título até o botão, sem número mágico nenhum. */
+/* .duo genérico traz align-items:start e vem depois no arquivo: sem a
+   especificidade dupla, o stretch nunca chegava a valer */
+.duo.duo--par{align-items:stretch}
+.duo.duo--par > .corpo{align-self:center}
+.foto-lado{position:relative;display:grid}
+.foto-lado > picture{display:block;height:100%;min-height:0}
+.foto-lado img{width:100%;height:100%;object-fit:cover;border-radius:2px;background:var(--papel-3)}
+.foto-lado::after{content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(28,26,25,.08);border-radius:2px}
+
 /* ---------- faixa de materiais ---------- */
 .fita{border-block:1px solid var(--linha);padding-block:1.05rem;overflow:hidden;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
@@ -167,6 +183,12 @@ body.travado{overflow:hidden}
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2rem,5vw,5rem);align-items:start}
 .duo--topo{align-items:start}
 .cab{display:grid;gap:1.1rem;max-width:44ch}
+.cab--centro{justify-items:center;text-align:center;margin-inline:auto}
+.cab--larga{max-width:none}
+/* o <br> do HTML é a quebra pretendida; sem isto o texto quebra sozinho
+   antes dela e o título vai para três linhas */
+.h2--duas{text-wrap:balance}
+.h2--uma{white-space:nowrap}
 .corpo p + p{margin-top:1.1rem}
 .corpo{color:var(--tinta-2)}
 
