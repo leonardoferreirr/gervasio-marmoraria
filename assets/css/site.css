@@ -93,7 +93,7 @@ a{color:inherit;text-decoration:none}
 .acoes{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.2rem}
 /* CTA que fecha um bloco de texto: cola no parágrafo em vez de flutuar
    no fim da seção, e é o que tira a altura sobrando */
-.acoes--fim{margin-top:1.9rem}
+.acoes--fim{margin-top:1.9rem;justify-content:center}
 .acoes--centro{justify-content:center}
 
 /* ---------- nav ---------- */
@@ -158,11 +158,18 @@ body.travado{overflow:hidden}
 /* ouro de verdade, não uma cor chapada: o degradê atravessa a palavra do
    bronze ao quase-branco e volta, que é como metal polido reflete. O
    background-clip recorta o degradê na forma da letra. */
+/* Dois douradas, porque o mesmo degradê não serve nos dois fundos: sobre
+   branco os tons claros do ouro do hero somem e o contraste cai para 2,6:1.
+   Aqui o pico para em #b8873f, que é o tom mais claro que ainda dá 3:1. */
 .ouro{background-image:linear-gradient(96deg,
+    #5c3b0e 0%,#9c6b28 15%,#b8873f 28%,#7a5216 42%,#b8873f 56%,
+    #8f6224 72%,#a9762f 86%,#6d4711 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:#8f6224;-webkit-text-fill-color:transparent}
+.hero .ouro{background-image:linear-gradient(96deg,
     #a9762f 0%,#e6c489 14%,#fbeec2 27%,#dcae5f 40%,#fff6dc 52%,
     #d6a559 66%,#f4dda8 80%,#c9954a 92%,#8f6224 100%);
-  -webkit-background-clip:text;background-clip:text;
-  color:#e8c98d;-webkit-text-fill-color:transparent}
+  color:#e8c98d}
 /* a chapa é sorteada a cada visita: uma hora um veio branco cai atrás de uma
    letra. O halo é difuso e escuro — invisível sobre o verde, que é quase toda
    a área, e é o que segura a leitura quando o veio passa por trás. */
@@ -191,6 +198,16 @@ body.travado{overflow:hidden}
 .hf--fundo img{filter:grayscale(1) sepia(1) hue-rotate(108deg) saturate(1.3) brightness(.5) contrast(1.06)}
 .hf::after{content:'';position:absolute;inset:0;
   box-shadow:inset 0 0 0 1px rgba(232,201,141,.22);border-radius:2px}
+
+/* o título e o corpo são irmãos da foto: só assim a foto pode entrar entre
+   os dois no celular (order/grid-row não alcançam netos) */
+.duo--estudio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  column-gap:clamp(2rem,5vw,5rem);row-gap:1.5rem;align-items:start}
+.duo--estudio > .h2{grid-column:1;grid-row:1;max-width:20ch}
+.duo--estudio > .corpo{grid-column:1;grid-row:2}
+.duo--estudio > .foto-lado{grid-column:2;grid-row:1/3;height:100%}
+
+.faq--centro{max-width:74ch;margin-inline:auto}
 
 /* ---------- foto lateral (seção "A pedra é definitiva") ----------
    O grid estica a coluna: a foto passa a ter exatamente a altura do bloco
@@ -377,6 +394,19 @@ body.travado{overflow:hidden}
   /* no celular o texto ocupa quase toda a largura: as fotos recuam para as
      faixas de cima e de baixo e ficam mais discretas */
   .hf.vis{opacity:.52}
+
+  /* a foto entra ENTRE o título e o texto; os três são irmãos do grid */
+  .duo--estudio{grid-template-columns:1fr;row-gap:1.4rem}
+  .duo--estudio > .h2{grid-column:1;grid-row:1}
+  .duo--estudio > .foto-lado{grid-column:1;grid-row:2;height:auto}
+  .duo--estudio > .corpo{grid-column:1;grid-row:3;font-size:.9375rem}
+  .duo--estudio > .foto-lado img{aspect-ratio:4/3}
+
+  /* número e título na mesma linha: encurta bastante a altura da seção */
+  .dif__i{grid-template-columns:auto minmax(0,1fr);column-gap:.75rem;align-items:baseline}
+  .dif__n{grid-column:1;grid-row:1}
+  .dif__i h3{grid-column:2;grid-row:1}
+  .dif__i p{grid-column:1/-1;grid-row:2;margin-top:.15rem}
   .chapa--clara .chapa__f{background-image:url('../img/chapa-clara-sm.webp')}
   .chapa--escura .chapa__f{background-image:url('../img/chapa-contraste-sm.webp')}
   /* empilhado, o texto ocupa a largura toda: o véu passa a ser uniforme */
@@ -403,6 +433,14 @@ body.travado{overflow:hidden}
 @media (max-width:620px){
   .dif{grid-template-columns:1fr}
   .pedra{min-height:auto}
+  /* "Transformando espaços com" numa linha só: em 360px o limite medido é
+     32px, e 8.3vw cobre de 360 a 620 sem estourar */
+  .hero .h1{font-size:clamp(1.6rem,8.3vw,2.3rem)}
+  /* a quebra do subtítulo serve ao desktop; aqui ela deixa linha órfã */
+  .hero .lead br{display:none}
+  /* os dois botões do hero com a mesma largura */
+  .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
+  .hero .acoes .btn{width:100%}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
