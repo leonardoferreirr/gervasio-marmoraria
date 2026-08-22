@@ -95,6 +95,9 @@ a{color:inherit;text-decoration:none}
    no fim da seção, e é o que tira a altura sobrando */
 .acoes--fim{margin-top:1.9rem;justify-content:center}
 .acoes--centro{justify-content:center}
+/* quebras que mudam por formato: o mesmo título pede corte diferente em
+   cada largura, e <br> fixo serve a um formato e atrapalha o outro */
+.q-m{display:none}
 
 /* ---------- nav ---------- */
 .nav{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s var(--ease),box-shadow .35s var(--ease),backdrop-filter .35s}
@@ -360,7 +363,11 @@ body.travado{overflow:hidden}
 .rodape{background:var(--tinta);color:rgba(244,241,235,.72);padding-block:clamp(3.5rem,7vw,5rem) 2rem}
 .rodape__top{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.8fr));
   gap:clamp(2rem,4vw,3.5rem);align-items:start}
-.rodape .wm{width:200px;color:#f4f1eb;margin-bottom:1.3rem}
+/* o rodapé trazia só o wordmark: aqui a marca fica completa, com o isotipo,
+   e um pouco menor para não competir com a do cabeçalho */
+.rodape__logo{display:flex;align-items:center;gap:.65rem;color:#f4f1eb;margin-bottom:1.3rem}
+.rodape__logo .los{width:24px;height:24px;flex:none}
+.rodape .wm{width:172px;color:#f4f1eb}
 .rodape__k{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(244,241,235,.62);
   font-weight:600;margin-bottom:1rem}
 .rodape ul{list-style:none;display:grid;gap:.05rem}
@@ -441,6 +448,27 @@ body.travado{overflow:hidden}
   /* os dois botões do hero com a mesma largura */
   .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
   .hero .acoes .btn{width:100%}
+
+  /* as quebras trocam de lado no celular */
+  .q-d{display:none}
+  .q-m{display:inline}
+
+  /* "A pedra sai da bancada" numa linha só, centralizado. 32px é o mesmo
+     corpo dos outros títulos e cabe: o limite medido em 360px é 34px. */
+  .h2--umalinha{text-align:center}
+  #trabalhos .cab{max-width:none;justify-items:center}
+  /* contato centralizado junto */
+  .chapa--escura .h2,.chapa--escura .lead{text-align:center;margin-inline:auto}
+
+  /* tópicos em duas colunas: a lista é curta e ocupava altura à toa */
+  .cat__lista{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:.9rem}
+  .cat__lista li{font-size:.88rem}
+
+  /* um corpo de texto só no celular, o mesmo de "A pedra é definitiva":
+     15px. Antes cada seção usava o seu e a página lia desalinhada. */
+  .corpo,.cat p,.dif__i p,.faq p,.card__d,
+  section:not(.hero) .lead{font-size:.9375rem}
+  .duo--estudio > .corpo{font-size:.9375rem}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
