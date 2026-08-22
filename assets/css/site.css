@@ -400,7 +400,15 @@ body.travado{overflow:hidden}
   .nav__burger{display:block}
   /* no celular o texto ocupa quase toda a largura: as fotos recuam para as
      faixas de cima e de baixo e ficam mais discretas */
-  .hf.vis{opacity:.52}
+  .hf.vis{opacity:.40}
+  /* base já bem apagada aqui: a que cruza o texto não precisa cair tanto
+     quanto no desktop para a leitura ficar de pé */
+  .hf--fundo.vis{opacity:.20}
+  /* o texto ocupa quase metade da altura no celular, bem mais que no desktop:
+     a zona protegida acompanha, senão o veio claro chega ao parágrafo */
+  .hero__tela--luz{
+    -webkit-mask-image:radial-gradient(ellipse 88% 50% at 50% 48%,rgba(0,0,0,.04) 0%,rgba(0,0,0,.14) 56%,rgba(0,0,0,.56) 80%,#000 96%);
+    mask-image:radial-gradient(ellipse 88% 50% at 50% 48%,rgba(0,0,0,.04) 0%,rgba(0,0,0,.14) 56%,rgba(0,0,0,.56) 80%,#000 96%)}
 
   /* a foto entra ENTRE o título e o texto; os três são irmãos do grid */
   .duo--estudio{grid-template-columns:1fr;row-gap:1.4rem}
