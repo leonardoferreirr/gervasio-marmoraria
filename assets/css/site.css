@@ -60,7 +60,10 @@ a{color:inherit;text-decoration:none}
 .sec--tight{padding-block:clamp(3.5rem,6vw,5.5rem)}
 
 /* ---------- tipografia ---------- */
-.h1,.h2,.h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.04}
+/* cor explícita: sem ela o h2 dentro de um bloco .corpo herdava --tinta-2 e
+   saía num cinza mais claro que o das outras seções */
+.h1,.h2,.h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.04;
+  color:var(--tinta)}
 .h1{font-size:clamp(2.5rem,6.2vw,5.1rem)}
 .h2{font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.08}
 .h3{font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.16}
@@ -85,12 +88,13 @@ a{color:inherit;text-decoration:none}
 .btn--wa:hover{background:var(--wa-hover);border-color:var(--wa-hover)}
 .btn--vazio{background:transparent;color:var(--tinta);border-color:var(--linha)}
 .btn--vazio:hover{background:var(--papel-2);border-color:var(--tinta-3)}
-.btn--claro{background:transparent;color:#f2efe9;border-color:rgba(242,239,233,.42)}
-.btn--claro:hover{background:rgba(242,239,233,.1);border-color:rgba(242,239,233,.7)}
+.btn--claro{background:rgba(2,16,12,.62);color:#f2efe9;border-color:rgba(242,239,233,.52)}
+.btn--claro:hover{background:rgba(242,239,233,.14);border-color:rgba(242,239,233,.8)}
 .acoes{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.2rem}
 /* CTA que fecha um bloco de texto: cola no parágrafo em vez de flutuar
    no fim da seção, e é o que tira a altura sobrando */
 .acoes--fim{margin-top:1.9rem}
+.acoes--centro{justify-content:center}
 
 /* ---------- nav ---------- */
 .nav{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s var(--ease),box-shadow .35s var(--ease),backdrop-filter .35s}
@@ -135,26 +139,58 @@ body.travado{overflow:hidden}
   min-height:100svh;display:grid;align-items:center;
   padding-block:clamp(7rem,13vh,9rem) clamp(3rem,6vw,4.5rem)}
 .hero__tela{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-.hero__tela--luz{z-index:2}
+.hero__tela--luz{z-index:2;
+  /* a luz fica ACIMA do véu de propósito, senão o véu apagaria o brilho — e
+     por isso era ela, não o véu, que estourava o contraste do texto. A
+     máscara tira a luz só do miolo: ela segue respirando onde aparece. */
+  -webkit-mask-image:radial-gradient(ellipse 76% 42% at 50% 50%,rgba(0,0,0,.05) 0%,rgba(0,0,0,.20) 46%,rgba(0,0,0,.64) 74%,#000 94%);
+  mask-image:radial-gradient(ellipse 76% 42% at 50% 50%,rgba(0,0,0,.05) 0%,rgba(0,0,0,.20) 46%,rgba(0,0,0,.64) 74%,#000 94%)}
 /* ordem: pedra, véu, luz, conteúdo. O véu acima dos pulsos apagaria a luz. */
+/* o texto é central, então o véu escurece do centro para fora: o gradiente
+   lateral da versão anterior servia ao texto encostado à esquerda */
 .hero__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    linear-gradient(90deg,rgba(2,16,12,.95) 0%,rgba(2,16,12,.88) 26%,rgba(2,16,12,.6) 48%,rgba(2,16,12,.4) 100%),
-    linear-gradient(rgba(2,16,12,.55),rgba(2,16,12,.34) 40%,rgba(2,16,12,.6))}
-.hero__grid{position:relative;z-index:3;display:grid;
-  grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);
-  gap:clamp(2rem,4vw,3.4rem);align-items:center}
-.hero .h1{font-size:clamp(2.4rem,5.2vw,4.3rem)}
-.hero .h1{color:#f7f5f0}
-.hero .lead{color:rgba(238,244,236,.84)}
+    radial-gradient(ellipse 86% 58% at 50% 50%,rgba(2,16,12,.90) 0%,rgba(2,16,12,.72) 50%,rgba(2,16,12,.14) 100%),
+    linear-gradient(rgba(2,16,12,.42),rgba(2,16,12,.12) 42%,rgba(2,16,12,.46))}
+.hero__centro{position:relative;z-index:5;display:grid;justify-items:center;text-align:center}
+.hero .h1{font-size:clamp(2.6rem,5.9vw,4.9rem);color:#f7f5f0;max-width:26ch}
+.hero .lead{color:rgba(238,244,236,.9);max-width:64ch}
+/* ouro de verdade, não uma cor chapada: o degradê atravessa a palavra do
+   bronze ao quase-branco e volta, que é como metal polido reflete. O
+   background-clip recorta o degradê na forma da letra. */
+.ouro{background-image:linear-gradient(96deg,
+    #a9762f 0%,#e6c489 14%,#fbeec2 27%,#dcae5f 40%,#fff6dc 52%,
+    #d6a559 66%,#f4dda8 80%,#c9954a 92%,#8f6224 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:#e8c98d;-webkit-text-fill-color:transparent}
+/* a chapa é sorteada a cada visita: uma hora um veio branco cai atrás de uma
+   letra. O halo é difuso e escuro — invisível sobre o verde, que é quase toda
+   a área, e é o que segura a leitura quando o veio passa por trás. */
+.hero .h1,.hero .lead{text-shadow:0 1px 14px rgba(2,16,12,.72),0 0 34px rgba(2,16,12,.55)}
 .hero .bordo{color:#e8c98d}
-.hero__t{margin-block:1.5rem 1.6rem}
-/* três colunas de largura igual: em flex com min-width o "RT" caía sozinho
-   para a segunda linha e desequilibrava o bloco */
-.hero__marca{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem 1.6rem;
-  margin-top:2.6rem;padding-top:1.7rem;border-top:1px solid rgba(242,239,233,.22)}
-.hero__marca b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#e8c98d;line-height:1.1}
-.hero__marca span{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:rgba(238,244,236,.62)}
+.hero__t{margin-block:0 1.5rem}
+
+/* ---------- fotos que aparecem e somem pelos cantos ----------
+   Aparições curtas em pontos afastados do texto, em verde, como se a chapa
+   deixasse ver por um instante o que já virou peça. Puramente decorativas:
+   entram por JS depois do load para não disputar com o LCP. */
+.hero__fotos{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.hf{position:absolute;border-radius:2px;overflow:hidden;opacity:0;
+  box-shadow:0 18px 44px rgba(0,0,0,.42);
+  transform:translate3d(0,14px,0) scale(.94);
+  transition:opacity 1.5s var(--ease),transform 1.5s var(--ease);
+  will-change:opacity,transform}
+.hf.vis{opacity:.60;transform:none}
+.hf img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) sepia(1) hue-rotate(108deg) saturate(1.35) brightness(.84) contrast(1.06)}
+/* a que cruza o texto entra bem mais apagada: continua passando por trás,
+   como presença, sem levar o título para 1,6:1 quando a foto é clara.
+   Vem depois de .hf img de propósito — as duas têm a mesma especificidade,
+   e no empate vale a última. */
+.hf--fundo.vis{opacity:.26}
+.hf--fundo img{filter:grayscale(1) sepia(1) hue-rotate(108deg) saturate(1.3) brightness(.5) contrast(1.06)}
+.hf::after{content:'';position:absolute;inset:0;
+  box-shadow:inset 0 0 0 1px rgba(232,201,141,.22);border-radius:2px}
 
 /* ---------- foto lateral (seção "A pedra é definitiva") ----------
    O grid estica a coluna: a foto passa a ter exatamente a altura do bloco
@@ -212,22 +248,32 @@ body.travado{overflow:hidden}
   transform:rotate(45deg)}
 
 
-/* ---------- colunas de foto do hero ----------
-   Duas colunas correndo em sentidos opostos no desktop; no celular vira
-   uma faixa horizontal, que é o único jeito de caber sem espremer. */
-.hero__gal{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,1.1vw,.9rem);
-  height:clamp(380px,62vh,620px);overflow:hidden;
-  -webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);
-  mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
-.hero__col{display:grid;gap:clamp(.6rem,1.1vw,.9rem);align-content:start;
-  animation:sobe 46s linear infinite;will-change:transform}
-.hero__col--desce{animation-name:desce;animation-duration:54s;margin-top:-9%}
-.hero__col > picture{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:2px;
-  box-shadow:0 10px 30px rgba(0,0,0,.32)}
-.hero__col img{display:block;width:100%;height:100%;object-fit:cover}
-@keyframes sobe{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-@keyframes desce{from{transform:translateY(-50%)}to{transform:translateY(0)}}
-.hero__gal:hover .hero__col{animation-play-state:paused}
+/* ---------- seções com fundo de chapa ----------
+   A chapa fica parada e a seção corre por cima. O clip-path no invólucro é o
+   que prende o position:fixed a ele em vez de à janela — é a rota que funciona
+   no iOS, onde background-attachment:fixed é quebrado.
+   As duas chapas são geradas por código, como a do hero. */
+.chapa{position:relative;isolation:isolate;background:var(--papel)}
+/* .contato define o próprio fundo e vem depois no arquivo: sem esta linha a
+   seção fica creme em vez de branca, e a chapa perde a base */
+.chapa.contato{background:var(--papel)}
+/* background-attachment:fixed e não um filho position:fixed: o clip-path que
+   recortaria esse filho também PRENDE o fixed ao invólucro, e o fundo volta a
+   rolar junto — o efeito se anula. No iOS o fixed é ignorado e o fundo apenas
+   rola, que é degradação suave, não defeito. */
+.chapa__f{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:.7;
+  background-attachment:fixed;background-repeat:no-repeat;background-size:cover;background-position:center}
+.chapa--clara .chapa__f{background-image:url('../img/chapa-clara.webp')}
+.chapa--escura .chapa__f{background-image:url('../img/chapa-contraste.webp')}
+/* a chapa escura tem veio carvão, e ele caía atrás do parágrafo de contato
+   (2,38:1). Este véu clareia só a coluna do texto e deixa a chapa inteira do
+   lado do mapa, que não tem nada para ler. */
+.chapa--escura .chapa__f::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(255,255,255,.80) 0%,rgba(255,255,255,.72) 38%,rgba(255,255,255,.22) 62%,rgba(255,255,255,0) 84%)}
+/* todos os filhos, não só o .wrap: o .cta-centro fica solto na seção, e sem
+   posicionamento ele era pintado ABAIXO da chapa, que o cobria a 70% e deixava
+   o botão lavado */
+.chapa > *:not(.chapa__f){position:relative;z-index:1}
 
 /* ---------- carrossel de trabalhos ---------- */
 .car{position:relative}
@@ -328,19 +374,16 @@ body.travado{overflow:hidden}
 @media (max-width:1000px){
   .nav__links{display:none}
   .nav__burger{display:block}
-  .hero{min-height:auto}
-  .hero__grid{grid-template-columns:1fr;gap:2.4rem}
-  /* no celular as colunas viram uma faixa horizontal */
-  .hero__gal{grid-template-columns:1fr;height:auto;gap:.6rem;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-  .hero__col{grid-auto-flow:column;grid-auto-columns:clamp(150px,42vw,210px);
-    animation-name:corre;animation-duration:44s}
-  /* o deslocamento vertical serve às colunas do desktop; aqui ele empilhava
-     a segunda faixa por cima da primeira e só uma aparecia */
-  .hero__col--desce{animation-name:corre-volta;animation-duration:52s;margin-top:0}
-  @keyframes corre{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  @keyframes corre-volta{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+  /* no celular o texto ocupa quase toda a largura: as fotos recuam para as
+     faixas de cima e de baixo e ficam mais discretas */
+  .hf.vis{opacity:.52}
+  .chapa--clara .chapa__f{background-image:url('../img/chapa-clara-sm.webp')}
+  .chapa--escura .chapa__f{background-image:url('../img/chapa-contraste-sm.webp')}
+  /* empilhado, o texto ocupa a largura toda: o véu passa a ser uniforme */
+  .chapa--escura .chapa__f::after{background:rgba(255,255,255,.46)}
+  /* na largura de celular o texto cobre a chapa inteira e o corpo em cinza
+     ficava em 4,44:1, no fio do AA. Um véu leve devolve a margem. */
+  .chapa--clara .chapa__f::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.20)}
   .car__nav{display:none}
   .car__pista{padding-inline:0}
   .duo,.contato__grid{grid-template-columns:1fr;gap:2.2rem}
@@ -360,14 +403,6 @@ body.travado{overflow:hidden}
 @media (max-width:620px){
   .dif{grid-template-columns:1fr}
   .pedra{min-height:auto}
-  /* em 390px as três colunas espremiam "de raio a partir de Nova Lima" em
-     três linhas. Aqui viram três linhas de verdade, valor e rótulo lado a lado. */
-  .hero__marca{grid-template-columns:1fr;gap:0}
-  .hero__marca div{display:flex;align-items:baseline;gap:.7rem;
-    padding-block:.62rem;border-bottom:1px solid var(--linha)}
-  .hero__marca div:last-child{border-bottom:0}
-  .hero__marca b{font-size:1.22rem;flex:none}
-  .hero__marca span{font-size:.74rem;line-height:1.35}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}

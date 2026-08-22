@@ -34,8 +34,11 @@ def minificar(css: str) -> str:
 def reancorar(css: str) -> str:
     """No arquivo, `../fonts/` sai de assets/css/ e chega em assets/fonts/.
     Inline no index.html, que está na raiz, o mesmo caminho vira /fonts/ e dá
-    404: as fontes somem e a página cai no fallback sem avisar."""
-    return css.replace("url('../fonts/", "url('assets/fonts/").replace('url("../fonts/', 'url("assets/fonts/')
+    404: as fontes somem e a página cai no fallback sem avisar.
+
+    Vale para qualquer pasta de assets, não só fontes — uma imagem de fundo
+    com `../img/` quebra do mesmo jeito, e igualmente em silêncio."""
+    return re.sub(r"""url\((['"]?)\.\./""", r"url(\1assets/", css)
 
 
 def main() -> int:
@@ -47,8 +50,8 @@ def main() -> int:
     enxuto = reancorar(minificar(bruto))
     html = HTML.read_text(encoding="utf-8")
 
-    if "../fonts/" in enxuto:
-        print("ainda há caminho ../fonts/ no CSS inline", file=sys.stderr)
+    if "url(" in enxuto and re.search(r"""url\((['"]?)\.\./""", enxuto):
+        print("ainda há caminho relativo ../ no CSS inline", file=sys.stderr)
         return 1
 
     ini = html.find(MARCA_INI)
