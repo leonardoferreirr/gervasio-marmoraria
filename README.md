@@ -63,7 +63,7 @@ são de banco de imagem, uma delas com marca d'água visível. O verde do site �
 
 ## Dados do cliente
 
-- WhatsApp `5531972400514` — mora numa constante só, no topo do `site.js`
+- WhatsApp `5531996905875` — mora numa constante só, no topo do `site.js`
 - Fixo (31) 3541-8936
 - Rua Toronto, 1854 — Jardim Canadá, Nova Lima, MG
 - Instagram [@marmorariagervasio_](https://www.instagram.com/marmorariagervasio_/)

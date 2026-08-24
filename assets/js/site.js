@@ -8,7 +8,7 @@
   /* ===================== WhatsApp =====================
      O número mora aqui, num lugar só. Todo CTA com [data-wa] passa por
      obrigado.html, que dispara a conversão e só então abre a conversa. */
-  const NUM = '5531972400514';
+  const NUM = '5531996905875';
   const MSG = 'Olá! Vim pelo site da Gervásio e quero falar sobre pedra para o meu projeto.';
   const destino = 'obrigado.html?n=' + NUM + '&t=' + encodeURIComponent(MSG);
   $$('[data-wa]').forEach(a => a.setAttribute('href', destino));
