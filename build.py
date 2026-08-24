@@ -10,12 +10,14 @@ rode este script; ele substitui o bloco <style> que já está no HTML.
 
     python3 build.py
 """
+import hashlib
 import re
 import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).parent
 CSS = RAIZ / "assets/css/site.css"
+JS = RAIZ / "assets/js/site.js"
 HTML = RAIZ / "index.html"
 
 MARCA_INI = "<style>"
@@ -41,6 +43,23 @@ def reancorar(css: str) -> str:
     return re.sub(r"""url\((['"]?)\.\./""", r"url(\1assets/", css)
 
 
+def versionar_script(html: str) -> tuple[str, str]:
+    """Carimba site.js com o hash do próprio conteúdo.
+
+    O Vercel serve /assets/ com `max-age=31536000, immutable`, o que só é
+    seguro quando o nome do arquivo muda a cada versão. Com nome fixo, quem
+    já visitou o site fica um ANO com o JS velho — foi assim que o número
+    antigo do WhatsApp continuou no ar para quem já tinha entrado.
+
+    O HTML não é cacheado, então ele sempre chega novo e aponta para a URL
+    nova; o navegador busca o arquivo por ser outra URL."""
+    if not JS.exists():
+        return html, "-"
+    versao = hashlib.sha256(JS.read_bytes()).hexdigest()[:10]
+    return re.sub(r'(src="assets/js/site\.js)(\?v=[a-f0-9]+)?"',
+                  rf'\1?v={versao}"', html), versao
+
+
 def main() -> int:
     if not CSS.exists() or not HTML.exists():
         print("assets/css/site.css ou index.html não encontrado", file=sys.stderr)
@@ -61,12 +80,14 @@ def main() -> int:
         return 1
 
     novo = html[:ini] + MARCA_INI + enxuto + html[fim:]
+    novo, versao = versionar_script(novo)
+
     if novo == html:
         print("nada mudou")
         return 0
 
     HTML.write_text(novo, encoding="utf-8")
-    print(f"css {len(bruto)} B -> {len(enxuto)} B  |  index.html {len(novo)} B")
+    print(f"css {len(bruto)} B -> {len(enxuto)} B  |  index.html {len(novo)} B  |  site.js?v={versao}")
     return 0
 
 

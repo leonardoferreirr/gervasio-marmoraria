@@ -64,6 +64,19 @@ são de banco de imagem, uma delas com marca d'água visível. O verde do site �
 ## Dados do cliente
 
 - WhatsApp `5531996905875` — mora numa constante só, no topo do `site.js`
+
+## Cache: por que o `build.py` carimba o script
+
+O Vercel serve `/assets/` com `max-age=31536000, immutable`. Isso só é seguro
+quando o nome do arquivo muda a cada versão — e `site.js` tem nome fixo. Sem
+carimbo, quem já visitou o site fica **um ano** com o JS velho: foi assim que o
+número antigo do WhatsApp continuou no ar para visitantes recorrentes.
+
+O `build.py` reescreve `site.js?v=<hash do conteúdo>` a cada execução. O HTML
+não é cacheado, então chega sempre novo e aponta para a URL nova.
+
+**Se trocar o conteúdo de uma imagem em `assets/img/`, troque também o nome do
+arquivo** — elas caem na mesma regra de cache e não têm carimbo.
 - Fixo (31) 3541-8936
 - Rua Toronto, 1854 — Jardim Canadá, Nova Lima, MG
 - Instagram [@marmorariagervasio_](https://www.instagram.com/marmorariagervasio_/)
