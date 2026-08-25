@@ -4,6 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
+
+<!-- Aqui o GTM vem no ALTO do head, ao contrário do index.html: esta página se
+     redireciona sozinha em ~1,5s, então o gtm.js tem uma janela curta pra
+     carregar e registrar o clique. O preconnect abre a conexão antes. Não há
+     foto nem LCP pra proteger, então nada disso disputa espaço com o conteúdo. -->
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-58P833LW');</script>
+<!-- End Google Tag Manager -->
+
 <title>Abrindo o WhatsApp · Gervásio Mármores e Granitos</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
@@ -29,6 +43,10 @@ p{color:#55504b;font-size:.98rem;line-height:1.62}
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-58P833LW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="caixa">
   <svg class="los" viewBox="0 0 100 100" fill="none" stroke="currentColor" aria-hidden="true"><path d="M50 3 96 50 50 97 4 50Z" stroke-width="3"/><path d="M50 13 86 50 50 87 14 50Z" stroke-width="1.5" opacity=".55"/><path d="M50 21 56.5 27.5 50 34 43.5 27.5Z" fill="currentColor" stroke="none"/><path d="M50 66 56.5 72.5 50 79 43.5 72.5Z" fill="currentColor" stroke="none"/></svg>
   <h1>Abrindo o seu <span class="it">WhatsApp</span></h1>
@@ -47,11 +65,21 @@ p{color:#55504b;font-size:.98rem;line-height:1.62}
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: 'whatsapp_click', destino: 'Gervasio Marmores e Granitos' });
 
+  // Sair da página mata qualquer script que ainda não rodou. Se o gtm.js não
+  // tiver carregado até a hora do redirecionamento, o clique não é contado em
+  // lugar nenhum, e é exatamente pra contar esse clique que esta página existe.
+  // Então: 1,5s para quem já tem o GTM de pé (a grande maioria), um fôlego a
+  // mais só para quem ainda está baixando, e teto de 2,4s para todo mundo.
+  // Depois que a tag dispara, o beacon do GA4 sobrevive à navegação sozinho.
+  var partiu = false;
+  function vai(){ if (partiu) return; partiu = true; location.href = alvo; }
+
   var manual = document.getElementById('manual'), ir = document.getElementById('ir'),
       giro = document.getElementById('giro'), msg = document.getElementById('msg');
   if (valido) {
     ir.href = alvo;
-    setTimeout(function(){ location.href = alvo; }, 1500);
+    setTimeout(function(){ if (window.google_tag_manager) vai(); }, 1500);
+    setTimeout(vai, 2400);
     setTimeout(function(){ giro.style.display='none'; manual.style.display='block'; }, 3000);
   } else {
     giro.style.display='none';
